@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редагування</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 50px;
+        }
+
+        input {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 300px;
+        }
+
+        .btn-save {
+            background: orange;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Редагувати дані: {{ row[1] }}</h2>
+    <form action="/employees/update/{{ row[0] }}" method="POST">
+        <label>Повне ім'я:</label>
+        <input type="text" name="full_name" value="{{ row[1] }}" required>
+
+        <label>Посада:</label>
+        <input type="text" name="position" value="{{ row[2] }}" required>
+
+        <label>Зарплата:</label>
+        <input type="number" name="salary" value="{{ row[3] }}" required>
+
+        <button type="submit" class="btn-save">Зберегти зміни</button>
+        <a href="/employees">Скасувати</a>
+    </form>
+</body>
+
+</html>

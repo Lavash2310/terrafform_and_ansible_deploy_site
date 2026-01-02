@@ -1,0 +1,117 @@
+- name: Setup Web Servers
+  hosts: servers
+  become: true
+  vars_files:
+    - vars/secrets.yml
+  vars:
+    app_dir: /opt/flask_app
+    venv_dir: "{{ app_dir }}/venv"
+    db_user_password: "{{ vault_db_user_password }}"
+    db_name: employee_db
+    db_host: "localhost"
+    db_sql_file: employees.sql
+  tasks:
+    - name: Installed all required packages
+      apt:
+        name:
+          - python3
+          - python3-setuptools
+          - python3-pip
+          - python3-venv
+          - pkg-config
+          - libmysqlclient-dev
+          - mysql-server
+        state: present
+
+    - name: Start MySQL database
+      service:
+        name: mysql
+        state: started
+        enabled: yes
+
+    - name: Create Application Database
+      mysql_db:
+        name: "{{ db_name }}"
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Create a Database User
+      mysql_user:
+        name: db_user
+        password: "{{ db_user_password }}"
+        priv: "{{ db_name }}.*:ALL"
+        host: "localhost"
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Prepare application directory
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: "0755"
+      loop:
+        - "{{ app_dir }}"
+        - "{{ app_dir }}/templates"
+
+    - name: Create virtual environment
+      command: python3 -m venv "{{ venv_dir }}"
+      args:
+        creates: "{{ venv_dir }}/bin/activate"
+
+    - name: Install Flask in virtualenv
+      pip:
+        virtualenv: "{{ venv_dir }}"
+        name:
+          - flask
+          - flask-mysqldb
+        state: present
+
+    - name: Copy SQL script
+      copy:
+        src: "{{ db_sql_file }}"
+        dest: "{{ app_dir }}/{{ db_sql_file }}"
+
+    - name: Import initial database schema
+      mysql_db:
+        name: "{{ db_name }}"
+        state: import
+        target: "{{ app_dir }}/{{ db_sql_file }}"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Copy source code
+      copy:
+        src: app.py
+        dest: "{{ app_dir }}/app.py"
+      notify: Restart Flask service
+
+    - name: Copy templates
+      copy:
+        src: templates/
+        dest: "{{ app_dir }}/templates/"
+
+    - name: Configure Systemd Service
+      template:
+        src: templates/flaskapp.service.j2
+        dest: /etc/systemd/system/flaskapp.service
+      notify:
+        - Restart Flask service
+
+    - name: Ensure Flask service is started and enabled
+      systemd:
+        name: flaskapp
+        state: started
+        enabled: yes
+
+  handlers:
+    - name: Restart MySQL Service
+      service:
+        name: mysql
+        state: restarted
+
+    - name: Restart Flask service
+      systemd:
+        name: flaskapp
+        state: restarted
+        daemon_reload: yes

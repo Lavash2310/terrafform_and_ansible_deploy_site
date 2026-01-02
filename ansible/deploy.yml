@@ -1,0 +1,32 @@
+name: Auto-deploy Cluster
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Ansible
+        uses: ansible/ansible-galaxy-action@v2
+
+      - name: Create Vault Password File
+        run: echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > .vault_secrets &&
+          chmod 600 .vault_secrets
+
+      - name: Run Ansible Playbook
+        run: |
+          ansible-playbook playbook.yml
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: "False"
+
+      - name: Clean up Vault Password File
+        if: always()
+        run: |
+          rm -f .vault_secrets
