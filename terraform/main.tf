@@ -65,7 +65,7 @@ resource "aws_route_table_association" "public_rt_assoc" {
 
 resource "aws_security_group" "web_sg" {
   name        = "web-sg"
-  description = "Allow SSH, HTTP, and custom port"
+  description = "Allow SSH, HTTP"
   vpc_id      = aws_vpc.main_vpc.id
 
   ingress {

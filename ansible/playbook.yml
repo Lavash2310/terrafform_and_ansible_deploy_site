@@ -72,23 +72,29 @@
           - pymysql
           - gunicorn
         state: present
+      notify: Restart Flask service
 
-    - name: Copy app files and Import DB
-      block:
-        - copy:
-            src: "{{ item.src }}"
-            dest: "{{ app_dir }}/{{ item.dest }}"
-          loop:
-            - { src: "app.py", dest: "app.py" }
-            - { src: "{{ db_sql_file }}", dest: "{{ db_sql_file }}" }
-        - copy:
-            src: templates/
-            dest: "{{ app_dir }}/templates/"
-        - mysql_db:
-            name: "{{ db_name }}"
-            state: import
-            target: "{{ app_dir }}/{{ db_sql_file }}"
-            login_unix_socket: /var/run/mysqld/mysqld.sock
+    - name: Copy application files
+      copy:
+        src: "{{ item.src }}"
+        dest: "{{ app_dir }}/{{ item.dest }}"
+      loop:
+        - { src: "app.py", dest: "app.py" }
+        - { src: "{{ db_sql_file }}", dest: "{{ db_sql_file }}" }
+      notify: Restart Flask service
+
+    - name: Copy templates
+      copy:
+        src: templates/
+        dest: "{{ app_dir }}/templates/"
+      notify: Restart Flask service
+
+    - name: Import Database
+      mysql_db:
+        name: "{{ db_name }}"
+        state: import
+        target: "{{ app_dir }}/{{ db_sql_file }}"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
 
     - name: Configure Nginx as Reverse Proxy
       copy:
@@ -97,7 +103,6 @@
           server {
               listen 80;
               server_name _;
-
               location / {
                   proxy_pass http://127.0.0.1:5000;
                   proxy_set_header Host $host;
@@ -106,32 +111,54 @@
                   proxy_set_header X-Forwarded-Proto $scheme;
               }
           }
+      notify: Restart Nginx
 
     - name: Enable Flask Nginx site
       file:
         src: /etc/nginx/sites-available/flask_app
         dest: /etc/nginx/sites-enabled/flask_app
         state: link
+      notify: Restart Nginx
 
     - name: Remove default Nginx site link
       file:
         path: /etc/nginx/sites-enabled/default
         state: absent
+      notify: Restart Nginx
 
     - name: Configure Systemd Service for Flask
       template:
         src: templates/flaskapp.service.j2
         dest: /etc/systemd/system/flaskapp.service
+      notify:
+        - Reload systemd
+        - Restart Flask service
 
-    - name: Restart Flask application
+    - name: Ensure services are enabled and started
+      service:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      loop:
+        - flaskapp
+        - nginx
+
+  handlers:
+    - name: Reload systemd
       systemd:
+        daemon_reload: yes
+
+    - name: Restart Flask service
+      service:
         name: flaskapp
         state: restarted
-        enabled: yes
-        daemon_reload: yes
 
     - name: Restart Nginx
       service:
         name: nginx
         state: restarted
-        enabled: yes
+
+    - name: Restart MySQL
+      service:
+        name: mysql
+        state: restarted
