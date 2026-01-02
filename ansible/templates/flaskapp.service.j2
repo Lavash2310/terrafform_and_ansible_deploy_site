@@ -4,10 +4,10 @@ After=network.target mysql.service
 
 [Service]
 User=www-data
+Group=www-data
 WorkingDirectory={{ app_dir }}
-ExecStart={{ venv_dir }}/bin/python {{ app_dir }}/app.py
-Restart=always
-Environment="DB_PASSWORD={{ vault_db_user_password }}"
+Environment="PATH={{ venv_dir }}/bin"
+ExecStart={{ venv_dir }}/bin/gunicorn --workers 3 --bind 127.0.0.1:5000 app:app
 
 [Install]
 WantedBy=multi-user.target

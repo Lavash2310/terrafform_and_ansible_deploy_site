@@ -38,14 +38,8 @@ variable "availability_zone" {
   default     = ["us-west-1a", "us-west-1c"]
 }
 
-variable "key_name" {
-  description = "The name of key pair to access the instance"
-  type        = string
-  default     = "my-mac-aws-key"
-}
-
 variable "ssh_key_path" {
   description = "Шлях до твого приватного ключа на MacBook"
   type        = string
-  default     = "~/.ssh/id_ed25519"
+  default     = "~/.ssh/aws_project_key"
 }
