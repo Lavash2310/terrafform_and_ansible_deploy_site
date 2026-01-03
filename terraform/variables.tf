@@ -6,18 +6,17 @@ variable "aws_region" {
 variable "instance_type" {
   description = "The type of instance to use"
   default     = "t2.micro"
-}
 
-variable "ami_id" {
-  description = "The AMI ID for the instance"
-  type        = string
-  default     = "ami-0e6a50b0059fd2cc3"
+  validation {
+    condition     = contains(["t2.micro", "t3.small", "t3.medium"], var.instance_type)
+    error_message = "The instance type must be t2.micro, t3.small, or t3.medium."
+  }
 }
 
 variable "vpc_main" {
   description = "The main VPC"
   type        = string
-  default     = "10.0.0.0/16"
+  default     = "10.0.0.0/16" 
 }
 
 variable "public_subnet_cidr" {
@@ -41,5 +40,5 @@ variable "availability_zone" {
 variable "ssh_key_path" {
   description = "Шлях до твого приватного ключа на MacBook"
   type        = string
-  default     = "~/.ssh/aws_project_key"
+  default     = "/Users/delphin/.ssh/aws_project_key"
 }

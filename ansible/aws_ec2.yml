@@ -1,0 +1,13 @@
+plugin: aws_ec2
+regions:
+  - us-west-1
+filters:
+  tag:Name: web-instance
+  instance-state-name: [running]
+hostnames:
+  - network-interface.association.public-ip
+  - dns-name
+compose:
+  ansible_user: tags.OS | default('ubuntu')
+  ansible_host: public_ip_address
+  ansible_ssh_private_key_file: "'~/.ssh/aws_project_key'"
