@@ -81,6 +81,8 @@
             <input type="text" name="full_name" placeholder="Ім'я" required>
             <input type="text" name="position" placeholder="Посада" required>
             <input type="number" name="salary" placeholder="Зарплата" required>
+            <h3>Фото:</h3>
+            <input type="file" name="photo" accept="image/*">
             <button type="submit" class="btn-add">Додати</button>
         </form>
 
@@ -95,9 +97,18 @@
             {% for row in rows %}
             <tr>
                 <td>{{ loop.index }}</td>
+                <td>
+                    {% if row[5] %}
+                    <img src="{{ row[5] }}" alt="Фото" width="50" height="50"
+                        style="border-radius: 50%; object-fit: cover;">
+                    {% else %}
+                    <h3>Немає фото</h3>
+                    {% endif %}
+                </td>
                 <td>{{ row[1] }}</td>
                 <td>{{ row[2] }}</td>
                 <td>{{ row[3] }}</td>
+
                 <td>
                     <a href="/employees/update/{{ row[0] }}" class="btn btn-edit">Оновити</a>
                     <a href="/employees/delete/{{ row[0] }}" class="btn btn-del"

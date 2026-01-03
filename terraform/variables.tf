@@ -42,3 +42,15 @@ variable "ssh_key_path" {
   type        = string
   default     = "/Users/delphin/.ssh/aws_project_key"
 }
+
+variable "s3_bucket_name" {
+  description = "The name of the S3 bucket for Terraform state"
+  type        = string
+  default     = "my-project-s3-2026"
+}
+
+variable "dynamodb_table_name" {
+  description = "The name of the DynamoDB table for Terraform state locking"
+  type        = string
+  default     = "my-project-dynamodb-2026"
+}
