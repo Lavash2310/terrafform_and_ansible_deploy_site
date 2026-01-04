@@ -7,9 +7,9 @@ terraform {
   }
 
 
- /* backend "s3" {
+  /*backend "s3" {
     bucket = "my-project-s3-2026"
-    key    = "flask_app/dev/terraform.tfstate"
+    key    = "fastapi_app/dev/terraform.tfstate"
     region = "us-west-1"
     dynamodb_table = "my-project-dynamodb-2026"
     encrypt = true

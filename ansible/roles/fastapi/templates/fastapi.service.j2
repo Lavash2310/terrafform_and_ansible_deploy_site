@@ -1,5 +1,5 @@
 [Unit]
-Description=Flask Application Service
+Description=FastAPI Application Service
 After=network.target mysql.service
 
 [Service]
@@ -8,7 +8,8 @@ Group=www-data
 WorkingDirectory={{ app_dir }}
 Environment="PATH={{ venv_dir }}/bin"
 Environment="DB_PASSWORD={{ db_user_password }}"
-ExecStart={{ venv_dir }}/bin/gunicorn --workers 3 --bind 127.0.0.1:5000 app:app
+Environment="S3_BUCKET_NAME=my-project-s3-2026"
+ExecStart={{ venv_dir }}/bin/uvicorn app:app --host 127.0.0.1 --port 5000 --workers 3
 
 [Install]
 WantedBy=multi-user.target

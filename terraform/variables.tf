@@ -54,3 +54,9 @@ variable "dynamodb_table_name" {
   type        = string
   default     = "my-project-dynamodb-2026"
 }
+
+variable "dynamodb_employee_table_name" {
+  description = "The name of the DynamoDB table for employee records"
+  type        = string
+  default     = "employee_table"
+}

@@ -16,7 +16,7 @@ resource "aws_iam_role" "s3_access_role" {
 }
 
 resource "aws_iam_role_policy" "s3_access" {
-  name       = "flask_app_s3_access"
+  name       = "fastapi_app_s3_access"
   role       = aws_iam_role.s3_access_role.id
   policy = jsonencode({
     Version = "2012-10-17"
@@ -33,6 +33,15 @@ resource "aws_iam_role_policy" "s3_access" {
           aws_s3_bucket.tf_state_bucket.arn,
           "${aws_s3_bucket.tf_state_bucket.arn}/*"
         ]
+      },
+      {
+        Effect   = "Allow"
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem",
+          "dynamodb:Scan"
+        ]
+        Resource = aws_dynamodb_table.employee_table.arn
       }
     ]
   })

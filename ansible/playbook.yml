@@ -4,7 +4,7 @@
   vars_files:
     - vars/secrets.yml
   vars:
-    app_dir: /opt/flask_app
+    app_dir: /opt/fastapi_app
     venv_dir: "{{ app_dir }}/venv"
     db_user_password: "{{ vault_db_user_password }}"
     db_name: employee_db
@@ -14,5 +14,5 @@
   roles:
     - common
     - mysql
-    - flask
+    - fastapi
     - nginx

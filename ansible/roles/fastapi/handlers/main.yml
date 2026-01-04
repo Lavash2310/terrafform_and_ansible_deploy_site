@@ -2,7 +2,7 @@
   systemd:
     daemon_reload: yes
 
-- name: Restart Flask service
+- name: Restart FastAPI service
   service:
-    name: flaskapp
+    name: fastapi
     state: restarted

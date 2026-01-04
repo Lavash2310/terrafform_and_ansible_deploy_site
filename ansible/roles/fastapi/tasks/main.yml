@@ -14,17 +14,18 @@
   args:
     creates: "{{ venv_dir }}/bin/activate"
 
-- name: Install Python packages via pip
+- name: Install Python packages
   pip:
     virtualenv: "{{ venv_dir }}"
     name:
-      - flask
-      - flask-mysqldb
-      - mysqlclient
+      - fastapi
+      - uvicorn
       - pymysql
-      - gunicorn
+      - python-multipart
+      - jinja2
+      - boto3
     state: present
-  notify: Restart Flask service
+  notify: Restart FastAPI service
 
 - name: Copy application files
   copy:
@@ -33,13 +34,13 @@
   loop:
     - { src: "app.py", dest: "app.py" }
     - { src: "{{ db_sql_file }}", dest: "{{ db_sql_file }}" }
-  notify: Restart Flask service
+  notify: Restart FastAPI service
 
 - name: Copy templates
   copy:
     src: templates/
     dest: "{{ app_dir }}/templates/"
-  notify: Restart Flask service
+  notify: Restart FastAPI service
 
 - name: Import Database
   mysql_db:
@@ -48,16 +49,16 @@
     target: "{{ app_dir }}/{{ db_sql_file }}"
     login_unix_socket: /var/run/mysqld/mysqld.sock
 
-- name: Configure Systemd Service for Flask
+- name: Configure Systemd Service
   template:
-    src: flaskapp.service.j2
-    dest: /etc/systemd/system/flaskapp.service
+    src: fastapi.service.j2
+    dest: /etc/systemd/system/fastapi.service
   notify:
     - Reload systemd
-    - Restart Flask service
+    - Restart FastAPI service
 
-- name: Ensure flaskapp is enabled and started
+- name: Ensure service is enabled and started
   service:
-    name: flaskapp
+    name: fastapi
     state: started
     enabled: yes

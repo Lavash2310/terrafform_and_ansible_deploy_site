@@ -29,16 +29,16 @@
 </head>
 
 <body>
-    <h2>Редагувати дані: {{ row[1] }}</h2>
-    <form action="/employees/update/{{ row[0] }}" method="POST">
+    <h2>Редагувати дані: {{ row.full_name }}</h2>
+    <form action="/employees/update/{{ row.id }}" method="POST">
         <label>Повне ім'я:</label>
-        <input type="text" name="full_name" value="{{ row[1] }}" required>
+        <input type="text" name="full_name" value="{{ row.full_name }}" required>
 
         <label>Посада:</label>
-        <input type="text" name="position" value="{{ row[2] }}" required>
+        <input type="text" name="position" value="{{ row.position }}" required>
 
         <label>Зарплата:</label>
-        <input type="number" name="salary" value="{{ row[3] }}" required>
+        <input type="number" step="1" name="salary" value="{{ row.salary }}" required>
 
         <button type="submit" class="btn-save">Зберегти зміни</button>
         <a href="/employees">Скасувати</a>

@@ -77,18 +77,25 @@
         <h1>Список працівників</h1>
         <p class="server-info">Працює сервер: <b>{{ server_ip }}</b></p>
 
-        <form action="/employees/add" method="POST">
+        {% if request.query_params.get('error') == 'photo_required' %}
+        <p style="color: red; font-weight: bold;">Фото обов'язкове для додавання працівника!</p>
+        {% elif request.query_params.get('error') == 'upload_failed' %}
+        <p style="color: red; font-weight: bold;">Помилка завантаження фото в S3. Перевірте права доступу!</p>
+        {% endif %}
+
+        <form action="/employees/add" method="POST" enctype="multipart/form-data">
             <input type="text" name="full_name" placeholder="Ім'я" required>
             <input type="text" name="position" placeholder="Посада" required>
-            <input type="number" name="salary" placeholder="Зарплата" required>
-            <h3>Фото:</h3>
-            <input type="file" name="photo" accept="image/*">
+            <input type="number" step="0.01" name="salary" placeholder="Зарплата" required>
+            <h3>Фото: *</h3>
+            <input type="file" name="photo" accept="image/*" required>
             <button type="submit" class="btn-add">Додати</button>
         </form>
 
         <table>
             <tr>
-                <th>ID</th>
+                <th>№</th>
+                <th>Фото</th>
                 <th>Ім'я</th>
                 <th>Посада</th>
                 <th>Зарплата</th>
@@ -98,20 +105,19 @@
             <tr>
                 <td>{{ loop.index }}</td>
                 <td>
-                    {% if row[5] %}
-                    <img src="{{ row[5] }}" alt="Фото" width="50" height="50"
+                    {% if row.photo_url %}
+                    <img src="{{ row.photo_url }}" alt="Фото" width="50" height="50"
                         style="border-radius: 50%; object-fit: cover;">
                     {% else %}
-                    <h3>Немає фото</h3>
+                    <span>Немає</span>
                     {% endif %}
                 </td>
-                <td>{{ row[1] }}</td>
-                <td>{{ row[2] }}</td>
-                <td>{{ row[3] }}</td>
-
+                <td>{{ row.full_name }}</td>
+                <td>{{ row.position }}</td>
+                <td>{{ row.salary }}</td>
                 <td>
-                    <a href="/employees/update/{{ row[0] }}" class="btn btn-edit">Оновити</a>
-                    <a href="/employees/delete/{{ row[0] }}" class="btn btn-del"
+                    <a href="/employees/update/{{ row.id }}" class="btn btn-edit">Оновити</a>
+                    <a href="/employees/delete/{{ row.id }}" class="btn btn-del"
                         onclick="return confirm('Звільнити?')">Звільнити</a>
                 </td>
             </tr>
