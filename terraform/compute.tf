@@ -23,7 +23,7 @@ resource "aws_instance" "web_instance" {
 
   tags = {
     Name = "web-instance"
-    OS  = "ubuntu"
+    OS   = "ubuntu"
   }
 
   lifecycle {
@@ -36,10 +36,10 @@ resource "local_file" "ansible_inventory" {
   content = <<EOT
 [servers]
 ${aws_instance.web_instance.public_ip} ansible_user=${
-  aws_instance.web_instance.tags.OS == "ubuntu" ? "ubuntu" : 
+  aws_instance.web_instance.tags.OS == "ubuntu" ? "ubuntu" :
   aws_instance.web_instance.tags.OS == "debian" ? "admin" : "ec2-user"
 } ansible_ssh_private_key_file=${var.ssh_key_path}
 EOT
 
-  depends_on = [aws_instance.web_instance]
+depends_on = [aws_instance.web_instance]
 }

@@ -8,11 +8,6 @@ output "private_subnet_ids" {
   value       = values(aws_subnet.private_sb)[*].id
 }
 
-output "ssh_command" {
-  description = "The SSH command to access the web instance"
-  value       = "ssh -i ${var.ssh_key_path} ubuntu@${aws_instance.web_instance.public_ip}"
-}
-
 output "ssh_instructions" {
   description = "Instructions to SSH into the web instance"
   value       = <<EOT

@@ -1,5 +1,5 @@
 resource "aws_vpc" "main_vpc" {
-  cidr_block = var.vpc_main
+  cidr_block           = var.vpc_main
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
@@ -8,7 +8,7 @@ resource "aws_vpc" "main_vpc" {
 }
 
 resource "aws_subnet" "public_sb" {
-  for_each = { for idx, cidr in var.public_subnet_cidr : idx => cidr }
+  for_each                = { for idx, cidr in var.public_subnet_cidr : idx => cidr }
   vpc_id                  = aws_vpc.main_vpc.id
   cidr_block              = each.value
   availability_zone       = var.availability_zone[each.key]
@@ -19,7 +19,7 @@ resource "aws_subnet" "public_sb" {
 }
 
 resource "aws_subnet" "private_sb" {
-  for_each = { for idx, cidr in var.private_subnet_cidr : idx => cidr }
+  for_each          = { for idx, cidr in var.private_subnet_cidr : idx => cidr }
   vpc_id            = aws_vpc.main_vpc.id
   cidr_block        = each.value
   availability_zone = var.availability_zone[each.key]
@@ -47,7 +47,7 @@ resource "aws_route_table" "public_rt" {
 }
 
 resource "aws_route_table_association" "public_rt_assoc" {
-  for_each = aws_subnet.public_sb
+  for_each       = aws_subnet.public_sb
   subnet_id      = each.value.id
   route_table_id = aws_route_table.public_rt.id
 }

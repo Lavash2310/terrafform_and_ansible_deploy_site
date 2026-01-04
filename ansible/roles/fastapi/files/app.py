@@ -6,11 +6,18 @@ from fastapi import FastAPI, Request, Form, File, UploadFile
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from datetime import date
+import logging
+import watchtower
 import pymysql
 from contextlib import contextmanager
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
+boto3_client = boto3.client('logs', region_name='us-west-1')
+
+logger = logging.getLogger(__name__)
+logger.addHandler(watchtower.CloudWatchLogHandler(log_group='logging-group', boto3_client=boto3_client))
+logger.setLevel(logging.INFO)
 
 DB_CONFIG = {
     'user': 'db_user',
@@ -50,6 +57,7 @@ async def employees(request: Request):
 
 @app.post("/employees/add")
 async def add_employee(full_name: str = Form(), position: str = Form(), salary: float = Form(), photo: UploadFile = File(...)):
+    logger.info(f"Adding employee: {full_name}")
     if not photo or not photo.filename:
         return RedirectResponse(url="/employees?error=photo_required", status_code=303)
     
@@ -61,8 +69,9 @@ async def add_employee(full_name: str = Form(), position: str = Form(), salary: 
     try:
         s3.upload_fileobj(photo.file, BUCKET_NAME, filename, ExtraArgs={"ContentType": photo.content_type, "ACL": "public-read"})
         photo_url = f"https://{BUCKET_NAME}.s3.us-west-1.amazonaws.com/{filename}"
+        logger.info(f"Photo uploaded to S3: {photo_url}")
     except Exception as e:
-        print(f"S3 Upload Error: {e}")
+        logger.warning(f"Failed to upload photo to S3: {e}")
         return RedirectResponse(url="/employees?error=upload_failed", status_code=303)
     
     try:
@@ -71,9 +80,9 @@ async def add_employee(full_name: str = Form(), position: str = Form(), salary: 
             "photo_url": photo_url,
             "upload_date": today
         })
-        print("DynamoDB: Item inserted successfully")
+        logger.info(f"Item inserted into DynamoDB: {full_name}")
     except Exception as e:
-        print(f"DynamoDB Error: {e}")
+        logger.warning(f"Failed to insert item into DynamoDB: {e}")
 
     with get_db() as conn:
         with conn.cursor() as cursor:

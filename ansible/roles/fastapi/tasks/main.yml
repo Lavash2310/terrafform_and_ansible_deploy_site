@@ -24,6 +24,7 @@
       - python-multipart
       - jinja2
       - boto3
+      - watchtower
     state: present
   notify: Restart FastAPI service
 
