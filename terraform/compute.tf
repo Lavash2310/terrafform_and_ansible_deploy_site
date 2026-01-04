@@ -31,6 +31,7 @@ resource "aws_instance" "web_instance" {
   }
 }
 
+/*
 resource "local_file" "ansible_inventory" {
   filename = "${path.module}/../ansible/inventory.ini"
   content = <<EOT
@@ -43,3 +44,4 @@ EOT
 
 depends_on = [aws_instance.web_instance]
 }
+*/
