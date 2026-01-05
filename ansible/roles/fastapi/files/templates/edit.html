@@ -30,7 +30,7 @@
 
 <body>
     <h2>Редагувати дані: {{ row.full_name }}</h2>
-    <form action="/employees/update/{{ row.id }}" method="POST">
+    <form action="/employees/update/{{ row.id }}" method="POST" enctype="multipart/form-data">
         <label>Повне ім'я:</label>
         <input type="text" name="full_name" value="{{ row.full_name }}" required>
 
@@ -39,6 +39,11 @@
 
         <label>Зарплата:</label>
         <input type="number" step="1" name="salary" value="{{ row.salary }}" required>
+
+        <label>Змінити фото:</label>
+        <input type="file" name="photo" accept="image/*">
+
+        <label><small>Поточне фото: {{ row.photo_url }}</small></label>
 
         <button type="submit" class="btn-save">Зберегти зміни</button>
         <a href="/employees">Скасувати</a>

@@ -104,12 +104,32 @@ async def get_update_employee(id: int, request: Request):
     return RedirectResponse(url="/employees")
 
 @app.post("/employees/update/{id}")
-async def update_employee(id: int, full_name: str = Form(), position: str = Form(), salary: float = Form()):
+async def update_employee(id: int, full_name: str = Form(), position: str = Form(), salary: float = Form(), photo: UploadFile = File(None)):
+
+    new_photo_url = ""
+
+    if photo and photo.filename:
+        ext = photo.filename.split('.')[-1]
+        filename = f"{uuid4()}.{ext}"
+        
+        try:
+            s3.upload_fileobj(photo.file, BUCKET_NAME, filename, ExtraArgs={"ContentType": photo.content_type, "ACL": "public-read"})
+            new_photo_url = f"https://{BUCKET_NAME}.s3.us-west-1.amazonaws.com/{filename}"
+            logger.info(f"Photo uploaded to S3: {new_photo_url}")
+        except Exception as e:
+            logger.warning(f"Failed to upload photo to S3: {e}")
+            return RedirectResponse(url="/employees?error=upload_failed", status_code=303)
+
     with get_db() as conn:
         with conn.cursor() as cursor:
-            cursor.execute("UPDATE employees SET full_name = %s, position = %s, salary = %s WHERE id = %s", 
+            if new_photo_url:
+                cursor.execute("UPDATE employees SET full_name = %s, position = %s, salary = %s, photo_url = %s WHERE id = %s", 
                          (full_name, position, salary, id))
-            conn.commit()
+                conn.commit()
+            else:
+                cursor.execute("UPDATE employees SET full_name = %s, position = %s, salary = %s WHERE id = %s", 
+                         (full_name, position, salary, id))
+                conn.commit()
     
     return RedirectResponse(url="/employees", status_code=303)
 

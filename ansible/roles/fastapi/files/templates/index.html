@@ -99,6 +99,7 @@
                 <th>Ім'я</th>
                 <th>Посада</th>
                 <th>Зарплата</th>
+                <th>Дата найму</th>
                 <th>Дія</th>
             </tr>
             {% for row in rows %}
@@ -115,6 +116,7 @@
                 <td>{{ row.full_name }}</td>
                 <td>{{ row.position }}</td>
                 <td>{{ row.salary }}</td>
+                <td>{{ row.hire_date }}</td>
                 <td>
                     <a href="/employees/update/{{ row.id }}" class="btn btn-edit">Оновити</a>
                     <a href="/employees/delete/{{ row.id }}" class="btn btn-del"
