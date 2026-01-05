@@ -37,10 +37,17 @@ variable "availability_zone" {
   default     = ["us-west-1a", "us-west-1c"]
 }
 
+/*
 variable "ssh_key_path" {
-  description = "Шлях до твого приватного ключа на MacBook"
+  description = "The path to my SSH private key"
   type        = string
   default     = "/Users/delphin/.ssh/aws_project_key"
+}
+*/
+
+variable "ssh_key_public" {
+  description = "The public key for SSH access"
+  type        = string
 }
 
 variable "s3_bucket_name" {

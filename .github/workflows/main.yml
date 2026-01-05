@@ -13,7 +13,7 @@ jobs:
   validate-and-plan:
     name: Validate and Plan
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -42,10 +42,14 @@ jobs:
       - name: Terraform Validate
         working-directory: ./terraform
         run: terraform validate
+        env:
+          TF_VAR_ssh_key_public: ${{ secrets.SSH_PUBLIC_KEY }}
 
       - name: Terraform Plan
         working-directory: ./terraform
         run: terraform plan -out=tfplan
+        env:
+          TF_VAR_ssh_key_public: ${{ secrets.SSH_PUBLIC_KEY }}
 
       - name: Upload Plan
         uses: actions/upload-artifact@v4

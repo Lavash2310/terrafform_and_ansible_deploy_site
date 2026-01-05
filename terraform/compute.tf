@@ -10,7 +10,8 @@ data "aws_ami" "ubuntu" {
 
 resource "aws_key_pair" "deployer" {
   key_name   = "aws_project_key"
-  public_key = file(pathexpand("${var.ssh_key_path}.pub"))
+# public_key = file(pathexpand("${var.ssh_key_path}.pub")) 
+  public_key = var.ssh_public_key
 }
 
 resource "aws_instance" "web_instance" {
