@@ -169,6 +169,7 @@ jobs:
           ansible-playbook -i "${{ env.WEB_IP }}," playbook.yml \
             -u ubuntu \
             --private-key ~/.ssh/aws_project_key \
+            --vault-password-file .vault_secrets \
             --extra-vars "db_user_password=${{ secrets.DB_PASSWORD }}"
             rm .vault_secrets
         env:
