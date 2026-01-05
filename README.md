@@ -9,6 +9,22 @@
 
 This repository contains the infrastructure-as-code and configuration management scripts to automatically provision an AWS environment and deploy a FastAPI web application. The process is orchestrated through a GitHub Actions CI/CD pipeline, leveraging Terraform for infrastructure and Ansible for server configuration.
 
+---
+
+## 🎯 Key Features
+
+- ✅ **Full Infrastructure Automation** - Terraform provisions entire AWS infrastructure
+- ✅ **Configuration as Code** - Ansible roles for reproducible server configuration
+- ✅ **CI/CD Pipeline** - GitHub Actions for automated deployment
+- ✅ **Security Scanning** - Trivy integration for vulnerability detection
+- ✅ **Centralized Logging** - CloudWatch integration for application logs
+- ✅ **S3 Photo Storage** - Automatic photo upload with public URLs
+- ✅ **DynamoDB Metadata** - Backup employee metadata
+- ✅ **Secrets Management** - GitHub Secrets + Ansible Vault
+- ✅ **One-Click Destroy** - Clean infrastructure teardown
+
+---
+
 ## Architecture Overview
 
 The project provisions and configures a full-stack application environment on AWS.
@@ -43,12 +59,16 @@ The project provisions and configures a full-stack application environment on AW
     *   **`main.yml`:** A comprehensive deployment pipeline triggered on push to the `main` branch. It validates Terraform code, runs a Trivy security scan, provisions infrastructure with Terraform, and then uses a self-hosted runner to execute the Ansible playbook for application deployment and testing.
     *   **`destroy.yml`:** A manually triggered workflow to tear down all AWS resources managed by Terraform.
 
+---
+
 ## Prerequisites
 
 Before you begin, ensure you have the following:
 *   An AWS account with programmatic access (Access Key ID and Secret Access Key).
 *   A GitHub account.
 *   An SSH key pair. The public key will be added to the EC2 instance, and the private key will be used by Ansible.
+
+---
 
 ## Deployment Guide
 
@@ -93,6 +113,8 @@ The pipeline will execute the following stages:
 
 Upon successful completion, the public IP of the web server will be available in the workflow logs.
 
+---
+
 ## Destroying the Infrastructure
 
 To remove all a-ws resources created by this project, you can run the `Destroy Infrastructure` workflow.
@@ -100,6 +122,8 @@ To remove all a-ws resources created by this project, you can run the `Destroy I
 1.  Go to the **Actions** tab in your repository.
 2.  Select the **Destroy Infrastructure** workflow.
 3.  Click **Run workflow** to trigger the teardown process. Terraform will destroy all managed resources.
+
+---
 
 ## Project Structure
 
