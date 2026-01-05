@@ -37,8 +37,8 @@ This repository contains the infrastructure-as-code and configuration management
 ### Option 2: Local Deployment
 ```bash
 # Clone repository
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
-cd YOUR_REPO
+git clone https://github.com/Lavash2310/terrafform_and_ansible_deploy_site.git
+cd terrafform_and_ansible_deploy_site
 
 # Setup SSH keys
 ssh-keygen -t rsa -b 4096 -f ~/.ssh/aws_project_key
@@ -63,6 +63,33 @@ open http://$EC2_IP/employees
 ```
 
 **Expected deployment time:** 15-20 minutes
+
+---
+
+## Technology Stack
+
+### Infrastructure & DevOps
+| Tool | Version | Purpose |
+|------|---------|---------|
+| Terraform | 1.6.0 | Infrastructure as Code |
+| Ansible | 2.9+ | Configuration Management |
+| GitHub Actions | - | CI/CD Pipeline |
+| Trivy | latest | Security Scanning |
+
+### AWS Services
+- **EC2** - Application hosting (t2.micro)
+- **VPC** - Network isolation
+- **S3** - Photo storage
+- **DynamoDB** - Metadata storage
+- **CloudWatch** - Centralized logging
+- **IAM** - Access management
+
+### Application
+- **Backend**: FastAPI + Uvicorn
+- **Database**: MySQL 8.0
+- **Frontend**: Jinja2 Templates
+- **Web Server**: Nginx (reverse proxy)
+- **Python Libraries**: boto3, watchtower, pymysql
 
 ---
 
