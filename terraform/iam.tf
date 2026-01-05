@@ -31,8 +31,8 @@ resource "aws_iam_role_policy" "s3_access" {
           "s3:DeleteObject"
         ]
         Resource = [
-          aws_s3_bucket.tf_state_bucket.arn,
-          "${aws_s3_bucket.tf_state_bucket.arn}/*"
+          "arn:aws:s3:::${var.s3_bucket_name}",
+          "arn:aws:s3:::${var.s3_bucket_name}/*"
         ]
       },
       {
