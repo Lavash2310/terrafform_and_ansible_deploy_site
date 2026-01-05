@@ -164,7 +164,8 @@ jobs:
 
       - name: Run Ansible Playbook
         run: |
-          # Використовуємо кому після IP для динамічного inventory
+          echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > .vault_secrets
+
           ansible-playbook -i "${{ env.WEB_IP }}," playbook.yml \
             -u ubuntu \
             --private-key ~/.ssh/aws_project_key \
