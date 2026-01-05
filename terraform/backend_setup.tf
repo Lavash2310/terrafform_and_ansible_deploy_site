@@ -1,3 +1,4 @@
+/*
 resource "aws_s3_bucket" "tf_state_bucket" {
   bucket = var.s3_bucket_name
 
@@ -72,6 +73,7 @@ resource "aws_dynamodb_table" "tf_state_lock_table" {
     Name = "tf-state-lock-table"
   }
 }
+*/
 
 resource "aws_dynamodb_table" "employee_table" {
   name         = var.dynamodb_employee_table_name
