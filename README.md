@@ -1,5 +1,12 @@
 # AWS FastAPI App Deployment with Terraform and Ansible
 
+[![Deploy Infrastructure](https://img.shields.io/github/actions/workflow/status/Lavash2310/terrafform_and_ansible_deploy_site/main.yml?branch=main&label=Deploy&style=flat-square)](https://github.com/Lavash2310/terrafform_and_ansible_deploy_site/actions)
+[![Terraform](https://img.shields.io/badge/Terraform-1.6.0-623CE4?style=flat-square&logo=terraform&logoColor=white)](https://www.terraform.io/)
+[![Ansible](https://img.shields.io/badge/Ansible-2.9+-EE0000?style=flat-square&logo=ansible&logoColor=white)](https://www.ansible.com/)
+[![AWS](https://img.shields.io/badge/AWS-Cloud-FF9900?style=flat-square&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/)
+[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=flat-square&logo=python&logoColor=white)](https://www.python.org/)
+[![License](https://img.shields.io/github/license/Lavash2310/terrafform_and_ansible_deploy_site?style=flat-square)](./LICENSE)
+
 This repository contains the infrastructure-as-code and configuration management scripts to automatically provision an AWS environment and deploy a FastAPI web application. The process is orchestrated through a GitHub Actions CI/CD pipeline, leveraging Terraform for infrastructure and Ansible for server configuration.
 
 ## Architecture Overview
