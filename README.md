@@ -25,6 +25,47 @@ This repository contains the infrastructure-as-code and configuration management
 
 ---
 
+## 🚀 Quick Start
+
+### Option 1: GitHub Actions (Recommended)
+
+1. **Fork this repository**
+2. **Add required secrets** (see [Configuration](#2-configure-github-secrets))
+3. **Setup self-hosted runner** (see [Self-Hosted Runner Setup](#3-set-up-a-self-hosted-runner))
+4. **Push to `main` branch** → Auto-deploy! 🎉
+
+### Option 2: Local Deployment
+```bash
+# Clone repository
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO.git
+cd YOUR_REPO
+
+# Setup SSH keys
+ssh-keygen -t rsa -b 4096 -f ~/.ssh/aws_project_key
+
+# Deploy infrastructure
+cd terraform
+terraform init
+terraform apply -var="ssh_key_public=$(cat ~/.ssh/aws_project_key.pub)"
+
+# Get EC2 IP
+export EC2_IP=$(terraform output -raw web_public_ip)
+
+# Configure server
+cd ../ansible
+ansible-playbook -i "$EC2_IP," playbook.yml \
+  -u ubuntu \
+  --private-key ~/.ssh/aws_project_key \
+  --vault-password-file .vault_secrets
+
+# Access application
+open http://$EC2_IP/employees
+```
+
+**Expected deployment time:** 15-20 minutes
+
+---
+
 ## Architecture Overview
 
 The project provisions and configures a full-stack application environment on AWS.
