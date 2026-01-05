@@ -11,6 +11,8 @@ jobs:
   terraform-destroy:
     name: Terraform Destroy
     runs-on: ubuntu-latest
+    env:
+      TF_VAR_ssh_key_public: ${{ secrets.SSH_PUBLIC_KEY }}
     defaults:
       run:
         working-directory: ./terraform
