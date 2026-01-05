@@ -57,3 +57,21 @@ jobs:
           name: terraform-plan
           path: terraform/tfplan
           retention-days: 3
+
+  Trivy_security_scan:
+    name: Trivy Security Scan
+    runs-on: ubuntu-latest
+    needs: validate-and-plan
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "config"
+          ignore-unfixed: true
+          hide-progress: false
+          format: "table"
+          severity: "HIGH,CRITICAL"
+          exit-code: 1
