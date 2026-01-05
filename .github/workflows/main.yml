@@ -169,5 +169,6 @@ jobs:
             -u ubuntu \
             --private-key ~/.ssh/aws_project_key \
             --extra-vars "db_user_password=${{ secrets.DB_PASSWORD }}"
+            rm .vault_secrets
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
