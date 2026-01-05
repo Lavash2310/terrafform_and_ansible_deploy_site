@@ -250,3 +250,23 @@ employee-management-infra/
 │
 ├── .gitignore                          # Git ignore file
 └── README.md                           # Project documentation
+```
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Author
+
+**Your Name**
+- GitHub: [@Lavash2310](https://github.com/Lavash2310)
+- Email: maksym23102006@gmail.com
+
+## Acknowledgments
+
+- [Terraform AWS Provider](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+- [Ansible Documentation](https://docs.ansible.com/)
+- [FastAPI Framework](https://fastapi.tiangolo.com/)
+- [AWS Well-Architected Framework](https://aws.amazon.com/architecture/well-architected/)
