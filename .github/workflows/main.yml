@@ -126,7 +126,7 @@ jobs:
 
   ansible-deploy:
     name: Configure Server
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: Terraform-apply
     defaults:
       run:
