@@ -1,5 +1,5 @@
 - name: Setup Web Servers
-  hosts: servers
+  hosts: all
   become: true
   vars_files:
     - vars/secrets.yml
