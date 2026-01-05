@@ -162,6 +162,10 @@ jobs:
           WEB_IP=$(python3 -c "import json; print(json.load(open('../terraform/outputs.json'))['web_public_ip']['value'])")
           echo "WEB_IP=$WEB_IP" >> $GITHUB_ENV
 
+      - name: Wait for SSH to be ready
+        run: |
+          sleep 60
+
       - name: Run Ansible Playbook
         run: |
           echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > .vault_secrets
