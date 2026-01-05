@@ -1,3 +1,32 @@
+- name: Wait for APT lock to be released
+  shell: |
+    while fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1; do
+      echo "Waiting for other apt process to finish..."
+      sleep 5
+    done
+  changed_when: false
+
+- name: Setup Swap file
+  block:
+    - name: Check if swap exists
+      command: swapon --show
+      register: swap_check
+      changed_when: false
+
+    - name: Create 1GB swap file
+      shell: |
+        fallocate -l 1G /swapfile
+        chmod 600 /swapfile
+        mkswap /swapfile
+        swapon /swapfile
+      when: swap_check.stdout == ""
+
+    - name: Add swap to fstab
+      lineinfile:
+        path: /etc/fstab
+        regexp: "^/swapfile"
+        line: "/swapfile none swap sw 0 0"
+
 - name: Install required system packages
   apt:
     name:
