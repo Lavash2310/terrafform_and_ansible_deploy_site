@@ -142,11 +142,6 @@ jobs:
           name: terraform-outputs
           path: terraform/
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
       - name: Install Ansible
         run: pip install ansible boto3
 
