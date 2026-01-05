@@ -190,7 +190,7 @@ jobs:
           WEB_IP=$(python3 -c "import json; print(json.load(open('outputs.json'))['web_public_ip']['value'])")
           echo "Testing application at: http://$WEB_IP"
 
-          sleep 20 # Даємо час сервісам остаточно піднятися
+          sleep 20
 
           for i in {1..5}; do
             if curl -f -s http://$WEB_IP > /dev/null; then
@@ -201,20 +201,3 @@ jobs:
             sleep 10
           done
           exit 1
-
-  deployment-summary:
-    name: Deployment Summary
-    runs-on: ubuntu-latest
-    needs: test-deployment
-    if: always()
-
-    steps:
-      - name: Download Outputs
-        uses: actions/download-artifact@v4
-        with:
-          name: terraform-outputs
-
-      - name: Print Summary
-        run: |
-          WEB_IP=$(python3 -c "import json; print(json.load(open('outputs.json'))['web_public_ip']['value'])")
-          echo "Application URL: http://$WEB_IP"
