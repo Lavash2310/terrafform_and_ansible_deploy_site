@@ -201,3 +201,20 @@ jobs:
             sleep 10
           done
           exit 1
+
+  deployment-summary:
+    name: Deployment Summary
+    runs-on: ubuntu-latest
+    needs: test-deployment
+    if: always()
+
+    steps:
+      - name: Download Outputs
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-outputs
+
+      - name: Print Summary
+        run: |
+          WEB_IP=$(python3 -c "import json; print(json.load(open('outputs.json'))['web_public_ip']['value'])")
+          echo "Application URL: http://$WEB_IP"
