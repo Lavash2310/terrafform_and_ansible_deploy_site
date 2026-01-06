@@ -14,6 +14,7 @@ IF NOT EXISTS employees
     photo_url VARCHAR
 (255) NOT NULL
 );
+ORDER BY hire_date DESC
 
 TRUNCATE TABLE employees;
 
