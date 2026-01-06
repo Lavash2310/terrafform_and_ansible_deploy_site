@@ -49,7 +49,7 @@ async def main():
 async def employees(request: Request):
     with get_db() as conn:
         with conn.cursor() as cursor:
-            cursor.execute("SELECT * FROM employees;")
+            cursor.execute("SELECT * FROM employees ORDER BY hire_date DESC;")
             rows = cursor.fetchall()
     
     server_ip = socket.gethostbyname(socket.gethostname())
