@@ -37,7 +37,7 @@ This repository contains the infrastructure-as-code and configuration management
 ### Option 2: Local Deployment
 ```bash
 # Clone repository
-git clone https://github.com/Lavash2310/terrafform_and_ansible_deploy_site.git
+git clone https://github.com/kubezen-stack/terrafform_and_ansible_deploy_site.git
 cd terrafform_and_ansible_deploy_site
 
 # Setup SSH keys
@@ -261,7 +261,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Author
 
 **Your Name**
-- GitHub: [@Lavash2310](https://github.com/Lavash2310)
+- GitHub: [@kubezen-stack](https://github.com/kubezen-stack)
 - Email: maksym23102006@gmail.com
 
 ## Acknowledgments
